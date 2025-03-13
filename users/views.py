@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
-
+from django.core.paginator import Paginator
 from .models import User
 from .forms import UserRegisterForm
 import random
@@ -37,26 +37,9 @@ def verify_code(request):
             return redirect('login')
     return render(request, 'users/verify.html')
 
-
-
-from django.core.paginator import Paginator
-
 def user_list(request):
     users = User.objects.all()
     paginator = Paginator(users, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'users/user_list.html', {'page_obj': page_obj})
-
-from django.shortcuts import render
-from django.core.paginator import Paginator
-from .models import User
-
-def user_list(request):
-    users = User.objects.all()
-    paginator = Paginator(users, 5)
-    
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
     return render(request, 'users/user_list.html', {'page_obj': page_obj})
