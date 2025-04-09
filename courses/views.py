@@ -30,3 +30,26 @@ class AddRemoveStudentView(APIView):
         student = get_object_or_404(User, pk=request.data.get('student_id'), role='Student')
         course.students.remove(student)
         return Response({'message': 'Student removed'}, status=status.HTTP_200_OK)
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def course_list(request):
+    courses = Course.objects.all()
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+from rest_framework.decorators import api_view, permission_classes
+from .permissions import IsManager
+
+@api_view(['POST'])
+@permission_classes([IsManager])
+def add_course(request):
+    serializer = CourseSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)

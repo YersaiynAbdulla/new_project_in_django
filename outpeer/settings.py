@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'courses',
     'lessons',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'your_email@gmail.com'
 EMAIL_HOST_PASSWORD = 'your_password'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
